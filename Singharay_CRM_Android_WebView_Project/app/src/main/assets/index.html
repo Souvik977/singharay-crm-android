@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Singharay Enterprise CRM</title>
+<style>
+:root{--navy:#10233f;--blue:#1769e0;--bg:#f3f6fb;--ink:#17233b;--muted:#6d7890;--line:#e3e9f2;--green:#14865c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:15px/1.45 Inter,system-ui,Arial;color:var(--ink)}
+header{background:var(--navy);color:#fff;padding:16px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-size:20px;font-weight:800}.brand small{display:block;font-size:11px;letter-spacing:1.4px;color:#b8c9e7}
+.wrap{max-width:1200px;margin:auto;padding:20px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+button,.btn{border:0;border-radius:9px;padding:10px 14px;background:var(--blue);color:#fff;font-weight:650;cursor:pointer}
+button.secondary{background:#e8eef8;color:#233b62}button.green{background:var(--green)}
+select,input,textarea{padding:10px;border:1px solid #d6dfec;border-radius:8px;background:#fff;color:#17233b;width:100%;font:inherit}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button{background:#e4ebf6;color:#274365}.tabs button.active{background:var(--blue);color:#fff}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.card,.panel{background:#fff;border:1px solid var(--line);border-radius:13px;padding:16px;box-shadow:0 2px 8px #17233b05}
+.metric{font-size:25px;font-weight:800;margin-top:5px}.muted{color:var(--muted);font-size:13px}
+.panel h3{margin:0 0 14px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:5px}.field label{font-size:13px;font-weight:650;color:#45536b}
+form{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}form .wide{grid-column:span 3}form .actions{grid-column:span 3;display:flex;gap:8px}
+table{width:100%;border-collapse:collapse;min-width:760px}th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line);font-size:13px}th{background:#f7f9fc;color:#64728b}
+.tablewrap{overflow:auto}.pill{display:inline-block;padding:4px 8px;border-radius:20px;background:#edf3ff;color:#1759b5;font-size:12px}
+.hidden{display:none!important}.empty{text-align:center;padding:28px;color:var(--muted)}
+.login{max-width:430px;margin:50px auto;padding:24px;background:white;border-radius:16px;border:1px solid var(--line)}.login form{grid-template-columns:1fr}.login form>*{grid-column:auto!important}
+.timeline{display:flex;flex-direction:column;gap:8px;margin:12px 0}.step{padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#f8faff}.step.done{border-color:#a8dfc5;background:#effaf4}.step.current{border-color:#91baff;background:#eef5ff}.bill{background:#f1f7ff;padding:14px;border-radius:10px;margin-top:12px}.notice{padding:11px;background:#fff8e6;border:1px solid #f3dfad;border-radius:9px;font-size:13px;margin-bottom:14px}.jobhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.jobbox{border:1px solid #dce6f4;border-radius:14px;padding:14px;margin:12px 0;background:linear-gradient(135deg,#fff,#f7faff)}.job-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.jobform{background:#f5f8ff;border:1px solid #dce6f4;border-radius:12px;padding:14px;margin:12px 0}.jobform form{grid-template-columns:repeat(2,minmax(0,1fr))}.jobform form .wide,.jobform form .actions{grid-column:span 2}.jobform h4{margin:0 0 12px}.techhero{background:linear-gradient(135deg,#10233f,#1769e0);color:#fff;border-radius:16px;padding:18px;margin-bottom:14px}.techhero h2{margin:0 0 5px}.jobbox{box-shadow:0 5px 18px #10233f0b;transition:transform .15s,box-shadow .15s}.jobbox:hover{transform:translateY(-2px);box-shadow:0 9px 24px #10233f12}.job-actions button,.job-actions a{min-height:40px}.bill-editor{background:#f7faff;border:1px solid #dbe5f2;border-radius:13px;padding:14px;margin-top:14px}.bill-total{display:flex;justify-content:space-between;background:#eaf2ff;padding:12px;border-radius:10px;font-weight:800;margin:10px 0}@media(max-width:650px){.jobform form{grid-template-columns:1fr}.jobform form .wide,.jobform form .actions{grid-column:span 1}}
+@media(max-width:800px){.cards{grid-template-columns:repeat(2,1fr)}form{grid-template-columns:1fr 1fr}form .wide,form .actions{grid-column:span 2}.wrap{padding:12px}.grid2{grid-template-columns:1fr}}
+@media(max-width:460px){.cards{grid-template-columns:1fr 1fr}.metric{font-size:21px}header{padding:14px}}
+
+/* refined company dashboard styling */
+.panel{border:1px solid #e2eaf4;border-radius:17px;padding:20px;background:linear-gradient(180deg,#fff 0%,#fbfdff 100%);box-shadow:0 8px 26px rgba(24,53,94,.055);margin:14px 0}
+.panel h3{color:#17345b;font-size:18px;padding-bottom:11px;border-bottom:1px solid #edf2f8;margin-bottom:16px}
+.card{border:1px solid #e4ebf5;border-radius:15px;padding:17px;background:linear-gradient(145deg,#fff,#f8fbff);box-shadow:0 5px 16px rgba(25,55,100,.045)}
+.tabs{gap:8px;margin:12px 0 18px}.tabs button{border:1px solid #dce6f3;border-radius:10px;padding:10px 15px;box-shadow:0 2px 5px #18345b08}.tabs button.active{box-shadow:0 5px 14px #1769e025}
+input,select,textarea{border:1px solid #d6e1ef;border-radius:10px;min-height:42px;transition:border .15s,box-shadow .15s}input:focus,select:focus,textarea:focus{outline:none;border-color:#78a8ef;box-shadow:0 0 0 3px #1769e014}
+button,.btn{border-radius:10px;transition:transform .15s,box-shadow .15s}button:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 5px 12px #17345b12}
+.tablewrap{border:1px solid #e5ebf4;border-radius:12px;overflow:auto}th{background:#f0f5fc;color:#29476e;font-weight:700}td,th{padding:12px;border-bottom:1px solid #edf1f6}tr:last-child td{border-bottom:0}
+.empty{border:1px dashed #cbd8e8;border-radius:13px;background:#f8fbff;padding:24px}
+@media(max-width:650px){.panel{padding:14px;border-radius:14px}.tabs button{padding:9px 11px}}
+
+.assignment-pending{border:2px solid #f0a52b;background:#fff8e8;border-radius:12px;padding:13px;margin:12px 0}.assignment-actions{display:flex;gap:10px;flex-wrap:wrap}.assignment-actions button{min-width:120px;font-size:15px;padding:13px 18px}.assignment-actions .reject{background:#b83232}.assignment-actions .accept{background:#16834a}.ring-hint{font-size:12px;color:#81520a;margin-top:6px}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<header><div class="brand">SINGHARAY ENTERPRISE <small>AC SERVICE CRM • বাংলা / ENGLISH</small></div><div id="headerRight"></div></header>
+<div id="loginView" class="login">
+<h2>CRM Login / লগইন</h2><p class="muted">Admin ও Technician: Firebase-এ তৈরি Email ও Password ব্যবহার করুন। একই অ্যাকাউন্ট যেকোনো ফোনে ব্যবহার করা যাবে।</p>
+<div class="notice">Admin: Firebase Authentication-এ তৈরি Admin Email/Password দিন। Technician: Admin Panel-এ তৈরি Technician Email/Password দিন। Demo Login আর ব্যবহার করা হয় না।</div>
+<form id="loginForm">
+<div class="field"><label>Role / ভূমিকা</label><select id="role"><option value="admin">Admin</option><option value="tech">Technician</option></select></div>
+<div class="field"><label>Email Address</label><input id="loginId" type="email" autocomplete="username" placeholder="name@example.com" required></div>
+<div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" required></div>
+<button type="submit">Enter CRM</button>
+</form></div>
+<div id="app" class="hidden"><div class="wrap">
+<div class="toolbar"><div class="tabs" id="tabs"></div><div style="flex:1"></div><button class="secondary" id="alertBtn" type="button">🔔 Enable Job Alerts</button><button class="secondary" id="langBtn">বাংলা / English</button><button class="secondary" id="logout">Logout</button></div>
+<div id="content"></div></div></div>
+<script>
+const $=id=>document.getElementById(id);
+let user=null,tab='dashboard',bn=false;
+const normTech=v=>String(v||'').trim().toLowerCase();
+function technicianUsernameForName(name,data){const presence=data&&data.presence||{};const p=presence[name]||Object.values(presence).find(v=>normTech(v.name)===normTech(name));if(p&&p.username)return String(p.username).toLowerCase();const a=getAuth();for(const [id,acc] of Object.entries(a.technicians||{})){if(normTech(acc.name)===normTech(name))return String(acc.username||id).toLowerCase();}return normTech(name);}
+function isAssignedToCurrentTechnician(job){if(!user||user.role!=='tech'||!job)return false;const aliases=[user.username,user.name].map(normTech).filter(Boolean);const saved=getAuth();for(const [id,acc] of Object.entries(saved.technicians||{})){if(aliases.includes(normTech(acc.username||id))||aliases.includes(normTech(acc.name))){aliases.push(normTech(acc.username||id),normTech(acc.name));}}const assigned=[job.techUsername,job.tech,job.assignedTo,job.technicianUsername,job.technicianName].map(normTech).filter(Boolean);return assigned.some(v=>aliases.includes(v));}
+const AUTH_KEY='singharayCRMAuth';
+const FIREBASE_CONFIG={apiKey:"AIzaSyAW9OWuPDkxgwtCfHP_GiVH8ZcR2IpAx1w",authDomain:"singharay-crm.firebaseapp.com",projectId:"singharay-crm",storageBucket:"singharay-crm.firebasestorage.app",messagingSenderId:"417100912893",appId:"1:417100912893:web:61b1894f44e115b1354694",measurementId:"G-9BG4P6274M"};
+const defaultAuth={admin:{username:'',name:'Admin'},technicians:{}};
+const getAuth=()=>{try{const a=JSON.parse(localStorage.getItem(AUTH_KEY)||'{}');return {admin:a.admin||defaultAuth.admin,technicians:{...defaultAuth.technicians,...(a.technicians||{})}}}catch(e){return JSON.parse(JSON.stringify(defaultAuth))}};
+try{if(!localStorage.getItem(AUTH_KEY))localStorage.setItem(AUTH_KEY,JSON.stringify(defaultAuth))}catch(e){}
+try{if(!localStorage.getItem('singharayFirebaseConfig'))localStorage.setItem('singharayFirebaseConfig',JSON.stringify(FIREBASE_CONFIG))}catch(e){}
+const read=()=>JSON.parse(localStorage.getItem('singharayCRM')||'{"leads":[],"techs":["Technician 1"],"feedback":[],"expenses":[],"payments":[]}');
+let cloudDb=null,cloudReady=false,cloudBusy=false,cloudUnsubscribe=null,cloudApplyingRemote=false,cloudLastError='',cloudConnectPromise=null;
+const cloudConfig=()=>{try{return JSON.parse(localStorage.getItem('singharayFirebaseConfig')||'null')||FIREBASE_CONFIG}catch(e){return FIREBASE_CONFIG}};
+async function connectCloud(cfg){
+ if(cloudConnectPromise)return cloudConnectPromise;
+ cloudConnectPromise=(async()=>{
+  cloudLastError='';
+  if(!cfg||!cfg.apiKey||!cfg.projectId)throw new Error('Firebase config অসম্পূর্ণ। API Key ও Project ID পরীক্ষা করুন।');
+  if(!navigator.onLine)throw new Error('এই ফোনে Internet সংযোগ নেই। Wi-Fi/Mobile Data চালু করুন।');
+  if(!window.firebase)throw new Error('Firebase SDK লোড হয়নি। Internet/Chrome-এ gstatic.com ব্লক হচ্ছে কি না দেখুন।');
+  if(!firebase.apps.length)firebase.initializeApp(cfg);
+  else if(firebase.app().options.projectId!==cfg.projectId)throw new Error('এই Browser Profile-এ অন্য Firebase Project আগে থেকেই খোলা আছে। সব CRM Tab বন্ধ করে এই ফাইল নতুন করে খুলুন।');
+  const auth=firebase.auth();
+  try{await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)}catch(persistErr){console.warn('Auth persistence warning',persistErr)}
+  if(!auth.currentUser)throw new Error('Firebase Email/Password Login আগে করতে হবে। Login আবার চেষ্টা করুন।');
+  if(auth.currentUser.isAnonymous)throw new Error('Anonymous Login বন্ধ করুন। Firebase Email/Password ব্যবহার করুন।')
+  cloudDb=firebase.firestore();
+  // Firestore network is enabled by default; avoid explicit enableNetwork during Auth transition.
+  cloudReady=true;startAssignmentMonitor();
+  const el=$('cloudStatus');if(el)el.textContent='Firebase Authentication Connected • Firestore Network Enabled';
+  return cloudDb;
+ })();
+ try{return await cloudConnectPromise}catch(e){cloudReady=false;cloudLastError=(e.code?e.code+' — ':'')+(e.message||String(e));const el=$('cloudStatus');if(el)el.textContent='❌ Cloud Connection Failed: '+cloudLastError;console.error('Firebase connection failed',e);throw e}
+ finally{cloudConnectPromise=null}
+}
+let notificationBaselineReady=false,previousCloudLeads={};
+function startCloudListener(){if(!cloudDb||cloudUnsubscribe)return;cloudUnsubscribe=cloudDb.collection('singharayCRM').doc('main').onSnapshot(snap=>{if(!snap.exists)return;const remote=snap.data()||{};delete remote.cloudUpdatedAt;remote.leads=Array.isArray(remote.leads)?remote.leads:[];remote.techs=Array.isArray(remote.techs)?remote.techs:['Technician 1'];const incoming=remote.leads;if(notificationBaselineReady&&user){const before=previousCloudLeads,after={};incoming.forEach(j=>{after[j.id]=j;const old=before[j.id];if(user.role==='tech'&&isAssignedToCurrentTechnician(j)&&j.assignmentStatus==='pending'&&j.status!=='Completed'&&j.status!=='Cancelled'&&(!old||(!old||old.tech!==j.tech||old.techUsername!==j.techUsername)||old.assignmentVersion!==j.assignmentVersion)){notifyNewJob(j,'আপনার নামে নতুন Job Assign হয়েছে');startAssignmentReminder(j.id); }});previousCloudLeads=after;}else{previousCloudLeads={};incoming.forEach(j=>{previousCloudLeads[j.id]=j;if(user&&user.role==='tech'&&isAssignedToCurrentTechnician(j)&&j.assignmentStatus==='pending'&&j.status!=='Completed'&&j.status!=='Cancelled'){notifyNewJob(j,'আপনার নামে নতুন Job Assign হয়েছে');startAssignmentReminder(j.id);}});notificationBaselineReady=true;}cloudApplyingRemote=true;try{const local=read(),merged={...local,...remote};const jobMap=new Map((local.leads||[]).map(j=>[String(j.id),j]));(remote.leads||[]).forEach(j=>jobMap.set(String(j.id),j));merged.leads=Array.from(jobMap.values());merged.techs=[...new Set([...(local.techs||[]),...(remote.techs||[])])];merged.technicianProfiles={...(local.technicianProfiles||{}),...(remote.technicianProfiles||{})};merged.commission={...(local.commission||{}),...(remote.commission||{})};localStorage.setItem('singharayCRM',JSON.stringify(merged));if(user){if(user.role==='admin'){stopAllAssignmentRings();}render();}if(user&&user.role==='tech'){checkScheduleReminders();setTimeout(()=>autoStartTechnicianGPS(),300);}checkExpiredAssignments();const st=$('cloudStatus');if(st)st.textContent='☁️ Live Cloud Sync • '+new Date().toLocaleTimeString()}finally{cloudApplyingRemote=false}},err=>{console.error('Realtime sync error',err);cloudLastError=(err.code?err.code+' — ':'')+err.message;const st=$('cloudStatus');if(st)st.textContent='Live Sync Error: '+cloudLastError;if(user)render()})}
+let cloudWriteQueue=Promise.resolve();
+async function cloudPush(d){
+ if(!cloudReady||!cloudDb)throw new Error('Firebase Cloud এখনো সংযুক্ত হয়নি।');
+ // Serialize writes from this browser so stale parallel saves cannot race.
+ const task=cloudWriteQueue.then(async()=>{
+  const ref=cloudDb.collection('singharayCRM').doc('main');
+  await cloudDb.runTransaction(async tx=>{
+   const snap=await tx.get(ref),remote=snap.exists?(snap.data()||{}):{};
+   const merged={...remote,...d};
+   // Merge records by stable ID; local edits update matching records, remote-only records survive.
+   const rJobs=Array.isArray(remote.leads)?remote.leads:[],lJobs=Array.isArray(d.leads)?d.leads:[];
+   const byId=new Map(rJobs.map(j=>[String(j.id),j]));
+   for(const j of lJobs){const id=String(j.id);byId.set(id,byId.has(id)?{...byId.get(id),...j}:j);}
+   merged.leads=Array.from(byId.values());
+   // Preserve technician names and nested profile/commission records from every device.
+   merged.techs=[...new Set([...(Array.isArray(remote.techs)?remote.techs:[]),...(Array.isArray(d.techs)?d.techs:[])])];
+   merged.technicianProfiles={...(remote.technicianProfiles||{}),...(d.technicianProfiles||{})};
+   merged.commission={...(remote.commission||{}),...(d.commission||{})};
+   merged.cloudUpdatedAt=new Date().toISOString();
+   tx.set(ref,merged);
+  });
+  const st=$('cloudStatus');if(st)st.textContent='☁️ Cloud synced • '+new Date().toLocaleTimeString();
+ });
+ cloudWriteQueue=task.catch(()=>{});
+ try{return await task}catch(e){console.error('Cloud save failed',e);const st=$('cloudStatus');if(st)st.textContent='Cloud save error: '+(e.code||'')+' '+e.message;throw e}
+}
+let presenceTimer=null;
+async function setTechnicianPresence(online){if(!cloudReady||!cloudDb||!user||user.role!=='tech')return;const ref=cloudDb.collection('singharayCRM').doc('main');const stamp=Date.now();const entry={name:user.name,username:user.username,online:!!online,updatedAt:stamp};await ref.set({presence:{[String(user.username).toLowerCase()]:entry,[String(user.name).trim()]:entry},cloudUpdatedAt:new Date().toISOString()},{merge:true});}
+function startPresenceHeartbeat(){if(!user||user.role!=='tech')return;if(presenceTimer)clearInterval(presenceTimer);setTechnicianPresence(true).then(()=>{const st=$('cloudStatus');if(st)st.textContent='☁️ Connected • Technician Online'}).catch(e=>{cloudLastError=(e.code?e.code+' — ':'')+e.message;console.error('Presence update failed',e);const st=$('cloudStatus');if(st)st.textContent='Presence Error: '+cloudLastError;if(user)render()});presenceTimer=setInterval(()=>setTechnicianPresence(true).catch(e=>{cloudLastError=(e.code?e.code+' — ':'')+e.message;console.warn('Presence heartbeat failed',e);if(user)render()}),15000);}
+function stopPresenceHeartbeat(){if(presenceTimer)clearInterval(presenceTimer);presenceTimer=null;setTechnicianPresence(false).catch(()=>{});}
+function onlineTechnicians(data,exclude=[]){const now=Date.now(),presence=data.presence||{};return (data.techs||[]).filter(n=>{const a=Object.values(getAuth().technicians).find(x=>normTech(x.name)===normTech(n));const keys=[a&&a.username,n,a&&a.name].filter(Boolean).map(v=>String(v).toLowerCase());const p=keys.map(k=>presence[k]||presence[k.trim()]).find(Boolean)||Object.values(presence).find(v=>normTech(v.name)===normTech(n)||normTech(v.username)===normTech(a&&a.username));return !!(p&&p.online&&now-(+p.updatedAt||0)<180000&&!exclude.includes(n));});}
+function pickRoundRobin(data,exclude=[]){const list=onlineTechnicians(data,exclude);if(!list.length)return null;const start=Number(data.roundRobinIndex||0)%Math.max(1,(data.techs||[]).length);for(let step=0;step<(data.techs||[]).length;step++){const idx=(start+step)%(data.techs||[]).length,n=data.techs[idx];if(list.includes(n)){data.roundRobinIndex=(idx+1)%(data.techs.length||1);return n;}}return list[0];}
+function pickAnyTechnician(data,exclude=[]){const list=Array.isArray(data.techs)?data.techs:[];if(!list.length)return null;const start=Number(data.roundRobinIndex||0)%list.length;for(let step=0;step<list.length;step++){const idx=(start+step)%list.length,n=list[idx];if(n&&!exclude.some(x=>normTech(x)===normTech(n))){data.roundRobinIndex=(idx+1)%list.length;return n;}}return null;}
+async function cloudCreateLead(job){if(!cloudReady||!cloudDb)throw new Error('Firebase Cloud সংযুক্ত নেই।');const ref=cloudDb.collection('singharayCRM').doc('main');await cloudDb.runTransaction(async tx=>{const snap=await tx.get(ref);const data=snap.exists?snap.data():{};data.leads=Array.isArray(data.leads)?data.leads:[];data.techs=Array.isArray(data.techs)?data.techs:['Technician 1'];if(data.leads.some(x=>String(x.id)===String(job.id)))throw new Error('এই Job ID আগে থেকেই আছে।');data.leads.push(job);tx.set(ref,{...data,cloudUpdatedAt:new Date().toISOString()});});const snap=await ref.get();const remote=snap.data()||{};delete remote.cloudUpdatedAt;remote.leads=Array.isArray(remote.leads)?remote.leads:[];remote.techs=Array.isArray(remote.techs)?remote.techs:['Technician 1'];localStorage.setItem('singharayCRM',JSON.stringify(remote));return remote;}
+const save=d=>{localStorage.setItem('singharayCRM',JSON.stringify(d));if(!cloudApplyingRemote)cloudPush(d).catch(e=>console.warn('Cloud sync pending:',e.message))};
+async function cloudPull(){if(!cloudReady||!cloudDb)return;let snap=await cloudDb.collection('singharayCRM').doc('main').get();if(snap.exists){let remote=snap.data();delete remote.cloudUpdatedAt;remote.leads=Array.isArray(remote.leads)?remote.leads:[];remote.techs=Array.isArray(remote.techs)?remote.techs:['Technician 1'];const local=read();const merged={...local,...remote};const jobs=new Map((remote.leads||[]).map(j=>[String(j.id),j]));(local.leads||[]).forEach(j=>{if(!jobs.has(String(j.id)))jobs.set(String(j.id),j)});merged.leads=Array.from(jobs.values());merged.techs=[...new Set([...(remote.techs||[]),...(local.techs||[])])];merged.technicianProfiles={...(local.technicianProfiles||{}),...(remote.technicianProfiles||{})};merged.commission={...(local.commission||{}),...(remote.commission||{})};localStorage.setItem('singharayCRM',JSON.stringify(merged));}else await cloudPush(read());startCloudListener();}
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const t=(en,b)=>bn?b:en;
+async function login(){
+ const role=$('role').value,id=$('loginId').value.trim(),pw=$('loginPassword').value;
+ if(!id||!pw){alert('Login ID ও Password দিন।');return;}
+ if(role==='admin'){
+  try{
+   if(!window.firebase)throw new Error('Firebase SDK লোড হয়নি। Internet সংযোগ পরীক্ষা করুন।');
+   const cfg=cloudConfig();
+   if(!firebase.apps.length)firebase.initializeApp(cfg);else if(firebase.app().options.projectId!==cfg.projectId)throw new Error('Firebase Project mismatch। সঠিক CRM ফাইল খুলুন।');
+   const fbAuth=firebase.auth();await fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+   if(fbAuth.currentUser)await fbAuth.signOut();
+   const credential=await fbAuth.signInWithEmailAndPassword(id.toLowerCase(),pw);
+   await connectCloud(cfg);
+   const staffSnap=await cloudDb.collection('crmStaff').doc(credential.user.uid).get();
+   if(!staffSnap.exists||staffSnap.data()?.role!=='admin'||staffSnap.data()?.active!==true){await fbAuth.signOut();throw new Error('Admin UID crmStaff-এ অনুমোদিত নয়। role=admin এবং active=true যাচাই করুন।');}
+   const staff=staffSnap.data()||{};user={role:'admin',name:staff.name||'Admin',username:id.toLowerCase(),email:id.toLowerCase(),uid:credential.user.uid};
+   await cloudPull();cloudLastError='';
+   tab='dashboard';$('loginView').classList.add('hidden');$('app').classList.remove('hidden');$('headerRight').textContent=user.name+' • ADMIN';if($('alertBtn'))$('alertBtn').style.display='none';
+   render();startScheduleReminderMonitor();startAssignmentMonitor();
+  }catch(err){cloudReady=false;cloudDb=null;cloudLastError=(err.code?err.code+' — ':'')+err.message;console.error('Admin Firebase Login failed',err);alert('Admin Login / Cloud Connection হয়নি:\n'+cloudLastError);}
+  return;
+ }
+ try{
+  const email=id.toLowerCase();
+  if(!email.includes('@'))throw new Error('Technician Login ID হিসেবে Admin Panel-এ দেওয়া Email Address ব্যবহার করুন।');
+  if(!window.firebase)throw new Error('Firebase SDK লোড হয়নি। Internet সংযোগ পরীক্ষা করুন।');
+  const cfg=cloudConfig();
+  if(!firebase.apps.length)firebase.initializeApp(cfg);else if(firebase.app().options.projectId!==cfg.projectId)throw new Error('Firebase Project mismatch। সঠিক CRM ফাইল খুলুন।');
+  const fbAuth=firebase.auth();
+  if(fbAuth.currentUser)await fbAuth.signOut();
+  const credential=await fbAuth.signInWithEmailAndPassword(email,pw);
+  await connectCloud(cfg);
+  const staffSnap=await cloudDb.collection('crmStaff').doc(credential.user.uid).get();
+  if(!staffSnap.exists){await fbAuth.signOut();cloudReady=false;throw new Error('এই Firebase UID CRM-এ অনুমোদিত নয়। Admin Panel থেকে Technician Email Add করুন।');}
+  const staff=staffSnap.data()||{};
+  if(staff.role!=='technician'||staff.active===false){await fbAuth.signOut();cloudReady=false;throw new Error('এই Technician Account Admin বন্ধ করে দিয়েছেন অথবা Role ঠিক নেই।');}
+  const snap=await cloudDb.collection('singharayCRM').doc('main').get();
+  const remote=snap.exists?(snap.data()||{}):{};
+  const profiles=remote.technicianProfiles||{};
+  const profile=profiles[email]||profiles[credential.user.uid]||staff;
+  user={role:'tech',name:profile.name||staff.name||email,username:String(profile.username||staff.username||email).toLowerCase(),email,uid:credential.user.uid};
+  const localAuth=getAuth();localAuth.technicians[email]={username:email,email,name:user.name};localStorage.setItem(AUTH_KEY,JSON.stringify(localAuth));
+  await cloudPull();
+  tab='myjobs';$('loginView').classList.add('hidden');$('app').classList.remove('hidden');$('headerRight').textContent=user.name+' • TECHNICIAN';if($('alertBtn'))$('alertBtn').style.display='';
+  render();startScheduleReminderMonitor();startAssignmentMonitor();startPresenceHeartbeat();setTimeout(()=>autoStartTechnicianGPS(),900);
+ }catch(err){console.error('Technician Firebase Login failed',err);alert('Technician Login / Cloud Connection হয়নি:\n'+(err.code?err.code+' — ':'')+err.message);}
+}
+window.addEventListener('online',()=>{if(user&&cloudConfig())window.cloudSyncNow()});
+window.addEventListener('offline',()=>{cloudReady=false;cloudLastError='Internet সংযোগ বিচ্ছিন্ন।';const st=$('cloudStatus');if(st)st.textContent='❌ '+cloudLastError;if(user)render()});
+$('loginForm').onsubmit=e=>{e.preventDefault();login()};
+
+$('logout').onclick=()=>{stopPresenceHeartbeat();if(window.firebase&&firebase.apps.length)firebase.auth().signOut().catch(()=>{});if(scheduleReminderTimer)clearInterval(scheduleReminderTimer);scheduleReminderTimer=null;if(assignmentMonitorTimer)clearInterval(assignmentMonitorTimer);assignmentMonitorTimer=null;stopAllAssignmentRings();user=null;$('app').classList.add('hidden');$('loginView').classList.remove('hidden');$('headerRight').textContent=''};
+$('langBtn').onclick=()=>{bn=!bn;render()};
+let jobAudioContext=null,jobAlertsEnabled=false,notifiedJobIds={},ringtoneStopTimer=null,assignmentRingTimers={},assignmentMonitorTimer=null;
+async function enableJobAlerts(){if(!user||user.role!=='tech')return;try{const C=window.AudioContext||window.webkitAudioContext;if(C){jobAudioContext=jobAudioContext||new C();if(jobAudioContext.state==='suspended')await jobAudioContext.resume();}jobAlertsEnabled=true;if('Notification'in window&&Notification.permission==='default'){try{await Notification.requestPermission()}catch(e){}}const b=$('alertBtn');if(b)b.textContent='🔔 Job Alerts Enabled';playJobRingtone(true);alert('লম্বা Job Alert Sound চালু হয়েছে। ফোনের Media/Notification Volume বাড়িয়ে রাখুন। CRM খোলা রাখুন।');}catch(e){alert('Sound চালু করা যায়নি: '+e.message)}}
+function playJobRingtone(test=false){if(!user||user.role!=='tech')return;try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;jobAudioContext=jobAudioContext||new C();const c=jobAudioContext;if(c.state==='suspended')c.resume();const begin=c.currentTime;const duration=30;for(let cycle=0;cycle<15;cycle++){const base=begin+cycle*2;[1046,1318,1568,1318,1046].forEach((hz,i)=>{const at=base+i*.22,o=c.createOscillator(),g=c.createGain();o.type='square';o.frequency.setValueAtTime(hz,at);g.gain.setValueAtTime(.0001,at);g.gain.exponentialRampToValueAtTime(.72,at+.025);g.gain.setValueAtTime(.72,at+.13);g.gain.exponentialRampToValueAtTime(.0001,at+.19);o.connect(g);g.connect(c.destination);o.start(at);o.stop(at+.2);});}if(ringtoneStopTimer)clearTimeout(ringtoneStopTimer);ringtoneStopTimer=setTimeout(()=>{try{c.suspend()}catch(e){}},duration*1000+150);}catch(e){console.warn('Ringtone error',e)}}
+function stopRingtone(){if(ringtoneStopTimer)clearTimeout(ringtoneStopTimer);ringtoneStopTimer=null;try{if(jobAudioContext&&jobAudioContext.state==='running')jobAudioContext.suspend()}catch(e){}}
+function startAssignmentReminder(id){if(!user||user.role!=='tech'||!id||assignmentRingTimers[id])return;playJobRingtone();assignmentRingTimers[id]=setInterval(()=>{const j=read().leads.find(x=>String(x.id)===String(id));if(!j||j.assignmentStatus!=='pending'){clearInterval(assignmentRingTimers[id]);delete assignmentRingTimers[id];return;}playJobRingtone();},60000);}
+function stopAssignmentReminder(id){if(assignmentRingTimers[id]){clearInterval(assignmentRingTimers[id]);delete assignmentRingTimers[id];}stopRingtone();}
+function stopAllAssignmentRings(){Object.keys(assignmentRingTimers).forEach(stopAssignmentReminder);}
+function notifyNewJob(job,title){if(!user||user.role!=='tech'||!isAssignedToCurrentTechnician(job)||job.assignmentStatus!=='pending')return;const noticeKey=String(job.id||'')+':'+String(job.assignmentVersion||0);if(noticeKey&&notifiedJobIds[noticeKey]&&Date.now()-notifiedJobIds[noticeKey]<120000)return;if(noticeKey)notifiedJobIds[noticeKey]=Date.now();playJobRingtone();if(job.assignmentStatus==='pending'&&user&&user.role==='tech')startAssignmentReminder(job.id);if('Notification'in window&&Notification.permission==='granted'){try{new Notification('Singharay CRM • '+title,{body:(job.id||'')+' | '+(job.name||'Customer')+' | '+(job.service||'Service')+' — Accept/Reject করুন',tag:'job-'+job.id,requireInteraction:true})}catch(e){}}else{const msg=$('headerRight');if(msg){const old=msg.textContent;msg.textContent=old+' • 🔔 '+title;setTimeout(()=>{if(user)msg.textContent=user.name+' • '+user.role.toUpperCase()},12000)}}}
+// Atomic assignment decisions use a Firestore transaction so two technicians cannot accept the same job.
+async function updateJobTransaction(jobId,mutator){if(cloudReady&&cloudDb){const ref=cloudDb.collection('singharayCRM').doc('main');await cloudDb.runTransaction(async tx=>{const snap=await tx.get(ref);if(!snap.exists)throw new Error('CRM Cloud document পাওয়া যায়নি');const data=snap.data(),jobs=data.leads||[],job=jobs.find(x=>String(x.id)===String(jobId));if(!job)throw new Error('Job পাওয়া যায়নি');mutator(job,data);tx.set(ref,{...data,cloudUpdatedAt:new Date().toISOString()});});const snap=await ref.get();const remote=snap.data();delete remote.cloudUpdatedAt;localStorage.setItem('singharayCRM',JSON.stringify(remote));render();return;}const data=read(),job=data.leads.find(x=>String(x.id)===String(jobId));if(!job)throw new Error('Job পাওয়া যায়নি');mutator(job,data);save(data);render();}
+window.acceptAssignedJob=async id=>{try{await updateJobTransaction(id,(j)=>{if(!isAssignedToCurrentTechnician(j)||j.assignmentStatus!=='pending')throw new Error('এই Job আর আপনার জন্য Pending নয়');j.assignmentStatus='accepted';j.acceptedAt=new Date().toISOString();j.status='Accepted';j.events=j.events||[];j.events.push({status:'Technician Accepted Job',time:new Date().toLocaleString(),by:user.name});});stopAssignmentReminder(id);alert('Job Accepted হয়েছে।');}catch(e){alert(e.message)}};
+window.rejectAssignedJob=async id=>{const reason=prompt('Reject করার কারণ লিখুন (optional):','');if(reason===null)return;try{await updateJobTransaction(id,(j,d)=>{if(!isAssignedToCurrentTechnician(j)||j.assignmentStatus!=='pending')throw new Error('এই Job আর আপনার জন্য Pending নয়');advanceJobAssignmentData(j,d,'Rejected by '+user.name+(reason?' • '+reason:''));});stopAssignmentReminder(id);alert('Job Reject হয়েছে। পরবর্তী Technician-কে পাঠানো হয়েছে।');}catch(e){alert(e.message)}};
+function advanceJobAssignmentData(j,d,reason){const current=j.tech||'',attempted=Array.isArray(j.assignmentAttemptedTechs)?j.assignmentAttemptedTechs.slice():[current].filter(Boolean);j.events=j.events||[];j.events.push({status:'Assignment '+reason,time:new Date().toLocaleString(),by:'CRM Auto Assignment'});j.assignmentHistory=j.assignmentHistory||[];j.assignmentHistory.push({technician:current,result:reason,at:new Date().toISOString()});if(current&&!attempted.includes(current))attempted.push(current);j.assignmentAttemptedTechs=attempted;const next=pickRoundRobin(d,attempted);if(next){j.tech=next;j.techUsername=technicianUsernameForName(next,d);j.assignmentAttemptedTechs.push(next);j.assignedTechIndex=(d.techs||[]).indexOf(next);j.assignmentStatus='pending';j.assignmentVersion=(+j.assignmentVersion||0)+1;j.assignedAt=new Date().toISOString();j.assignmentExpiresAt=Date.now()+(+j.responseWindowMs||60000);j.status=j.isRevisit?'Revisit Assigned':'Assigned';j.acceptedAt=null;j.events.push({status:'Automatically reassigned to '+next,time:new Date().toLocaleString(),by:'CRM Auto Assignment'});}else{j.tech='';j.assignmentStatus='needs_admin';j.assignmentExpiresAt=null;j.status='Unassigned';j.events.push({status:'No other online and available technician — awaiting technician availability',time:new Date().toLocaleString(),by:'CRM Auto Assignment'});}}
+async function checkExpiredAssignments(){if(!user)return;const now=Date.now(),jobs=read().leads||[];for(const j of jobs){if(j.assignmentStatus==='pending'&&j.assignmentExpiresAt&&now>=Number(j.assignmentExpiresAt)){try{await updateJobTransaction(j.id,(live,d)=>{if(live.assignmentStatus==='pending'&&live.assignmentExpiresAt&&Date.now()>=Number(live.assignmentExpiresAt))advanceJobAssignmentData(live,d,'No response — timeout');});}catch(e){console.warn('Auto reassignment:',e.message)}}}}
+function startAssignmentMonitor(){if(assignmentMonitorTimer)clearInterval(assignmentMonitorTimer);checkExpiredAssignments();assignmentMonitorTimer=setInterval(checkExpiredAssignments,5000);}
+// Appointment reminders: alert the assigned technician 30 minutes before and at the scheduled time.
+let scheduleReminderTimer=null;
+function scheduleDateTime(job){
+  if(!job||!job.date||!job.time)return null;
+  const raw=String(job.time).trim();
+  // Date/time inputs normally provide YYYY-MM-DD and HH:mm; also accept 12-hour text.
+  let stamp=new Date(String(job.date).slice(0,10)+'T'+raw);
+  if(Number.isNaN(stamp.getTime())){
+    const m=raw.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+    if(m){let h=Number(m[1])%12;if(m[3].toUpperCase()==='PM')h+=12;stamp=new Date(String(job.date).slice(0,10)+'T'+String(h).padStart(2,'0')+':'+m[2]+':00');}
+  }
+  return Number.isNaN(stamp.getTime())?null:stamp;
+}
+function scheduleAlert(job,kind,title,body){
+  if(!user||user.role!=='tech'||!isAssignedToCurrentTechnician(job))return;
+  const key='singharayScheduleAlert:'+String(user.username||user.name)+':'+String(job.id)+':'+kind;
+  if(localStorage.getItem(key))return;
+  localStorage.setItem(key,String(Date.now()));
+  playJobRingtone();
+  if('Notification'in window&&Notification.permission==='granted'){
+    try{new Notification('Singharay CRM • '+title,{body,tag:'schedule-'+job.id+'-'+kind,requireInteraction:true});}catch(e){}
+  }
+  const h=$('headerRight');if(h){const original=user.name+' • '+user.role.toUpperCase();h.textContent='🔔 '+title+' • '+(job.name||'Customer');setTimeout(()=>{if(user)h.textContent=original},12000);}
+}
+function checkScheduleReminders(){
+  if(!user)return;
+  const now=Date.now(),d=read();
+  const jobs=(d.leads||[]).filter(j=>user.role==='tech'&&isAssignedToCurrentTechnician(j)&&j.status!=='Completed'&&j.status!=='Cancelled'&&!j.jobStartedAt);
+  jobs.forEach(j=>{const at=scheduleDateTime(j);if(!at)return;const delta=at.getTime()-now;
+    const customer=(j.name||'Customer')+' • '+(j.phone||'');
+    if(delta<=30*60*1000&&delta>0)scheduleAlert(j,'30min','৩০ মিনিট আগে Job Reminder',customer+' — কাস্টমারের কাছে রওনা হওয়ার প্রস্তুতি নিন। নির্ধারিত সময়: '+at.toLocaleTimeString());
+    if(delta<=0&&delta>=-10*60*1000)scheduleAlert(j,'ontime','Job Time Reached',customer+' — এখন কাস্টমারের কাছে পৌঁছানোর নির্ধারিত সময়।');
+  });
+}
+function startScheduleReminderMonitor(){if(scheduleReminderTimer)clearInterval(scheduleReminderTimer);checkScheduleReminders();scheduleReminderTimer=setInterval(checkScheduleReminders,15000);}
+$('alertBtn').onclick=enableJobAlerts;
+function render(){
+let d=read();let tabs=user.role==='admin'?['dashboard','leads','ledger','new','technicians','tracking','revisit','completed','reports','feedback','cloud','password']:['myjobs','ledger','completed','feedback','password'];
+$('tabs').innerHTML=tabs.map(x=>`<button class="${tab===x?'active':''}" data-tab="${x}">${({dashboard:t('Dashboard','ড্যাশবোর্ড'),leads:t('Active Jobs','চলমান কাজ'),ledger:t('Job List / খাতা','Job List / খাতা'),new:t('＋ New Lead','＋ নতুন লিড'),technicians:t('Technicians','টেকনিশিয়ান'),tracking:t('Live Tracking','লাইভ লোকেশন'),revisit:t('Revisit Jobs','রিভিজিট জব'),completed:t('Completed Jobs','কমপ্লিট জব'),reports:t('Reports','রিপোর্ট'),feedback:t('Feedback','ফিডব্যাক'),cloud:t('Cloud Sync','ক্লাউড সিঙ্ক'),myjobs:t('My Jobs','আমার কাজ'),password:t('Change Password','পাসওয়ার্ড পরিবর্তন')})[x]}</button>`).join('');
+$('tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render()});
+let leads=d.leads,assigned=leads.filter(x=>isAssignedToCurrentTechnician(x)),completed=leads.filter(x=>x.status==='Completed');
+if(user.role==='admin'){jobAlertsEnabled=false;stopAllAssignmentRings();}
+const metrics=`<div class="cards"><div class="card"><div class="muted">${t('Total Leads','মোট লিড')}</div><div class="metric">${leads.length}</div></div><div class="card"><div class="muted">${t('Pending Jobs','পেন্ডিং কাজ')}</div><div class="metric">${leads.filter(x=>x.status!=='Completed').length}</div></div><div class="card"><div class="muted">${t('Completed','সম্পন্ন')}</div><div class="metric">${completed.length}</div></div><div class="card"><div class="muted">${t('Collected Payments','মোট পেমেন্ট')}</div><div class="metric">₹${leads.reduce((a,x)=>a+(+x.paid||0),0)}</div></div></div>`;
+function table(arr){return `<div class="tablewrap"><table><thead><tr><th>ID</th><th>Customer</th><th>Phone</th><th>Service</th><th>Technician</th><th>Status</th><th>Payment</th><th>Location / Timeline</th><th>Action</th></tr></thead><tbody>${arr.map(x=>`<tr><td>${esc(x.id)}</td><td>${esc(x.name)}<br><span class="muted">${esc(x.address)}</span></td><td><a href="tel:${esc(x.phone)}">${esc(x.phone)}</a></td><td>${esc(x.service)}<br><small class="muted">📅 ${esc(x.date||'Not set')} ${esc(x.time||'')}</small></td><td>${esc(x.tech||'—')}</td><td><span class="pill">${esc(x.status)}</span></td><td>Bill ₹${+x.amount||0}<br>Paid ₹${+x.paid||0}<br>Due ₹${Math.max(0,(+x.amount||0)-(+x.paid||0))}<br>Comm. ₹${+x.commission||0}</td><td>${x.location?`<a target="_blank" href="https://maps.google.com/?q=${x.location.lat},${x.location.lng}">📍 Map</a><br>`:''}<small>${(x.events||[]).slice(-3).map(e=>esc(e.status)+' • '+esc(e.time)).join('<br>')}</small></td><td>${user.role==='tech'?`<button class="green" onclick="startJob('${x.id}')" ${x.jobStartedAt?'disabled':''}>▶ Job Start</button> <button class="secondary" onclick="endJob('${x.id}')" ${!x.jobStartedAt||x.jobEndedAt?'disabled':''}>■ Job End</button> <button onclick="generateBill('${x.id}')">🧾 Generate Bill</button>`:`<button class="secondary" onclick="editLead('${x.id}')">Update</button> <button class="secondary" onclick="markRevisit('${x.id}')">🔁 Revisit</button> ${x.status!=='Cancelled'&&x.status!=='Completed'?`<button style="background:#fee2e2;color:#991b1b" onclick="adminCancelJob('${x.id}')">✖ Cancel Job</button>`:''} ${x.billGenerated?`<button onclick="generateBill('${x.id}')">View Bill</button>`:''}`}</td></tr>`).join('')}</tbody></table></div>`}
+let out='';
+if(tab==='dashboard'){let activeLeads=leads.filter(x=>!x.isRevisit&&x.status!=='Completed'&&x.status!=='Cancelled');out=metrics+`<div class="panel"><h3>${t('Active / Recent Jobs','চলমান ও সাম্প্রতিক কাজ')}</h3>${activeLeads.length?table(activeLeads.slice(-8).reverse()):'<div class="empty">কোনো চলমান কাজ নেই। সম্পন্ন কাজ Completed Jobs ট্যাবে থাকবে।</div>'}</div>`;}
+if(tab==='leads')out=`<div class="panel"><h3>${t('Lead Management','লিড ম্যানেজমেন্ট')}</h3>${table(leads.filter(x=>!x.isRevisit&&x.status!=='Completed').slice().reverse())}</div>`;
+if(tab==='ledger'){let ledgerRows=user.role==='admin'?leads:leads.filter(x=>isAssignedToCurrentTechnician(x));out=`<div class="panel"><h3>📒 Job List / খাতা লিস্ট (${ledgerRows.length})</h3><div class="toolbar"><input id="ledgerSearch" placeholder="Search Job ID / Customer / Phone / Technician / Status" style="max-width:480px"><button type="button" class="secondary" onclick="render()">↻ Refresh</button></div><div id="ledgerTable">${ledgerRows.length?table(ledgerRows.slice().sort((a,b)=>String(b.createdAt||b.id).localeCompare(String(a.createdAt||a.id)))):'<div class="empty">খাতা লিস্টে কোনো Job নেই। Cloud Sync করে দেখুন।</div>'}</div></div>`;}
+if(tab==='revisit'&&user.role==='admin'){let revisits=leads.filter(x=>(x.isRevisit===true||x.status==='Revisit Pending'||x.status==='Revisit Assigned')).slice().reverse();out=`<div class="panel"><h3>🔁 Revisit Jobs / পুনরায় অভিযোগের কাজ</h3><div class="notice">গ্রাহকের আগের সার্ভিস নিয়ে কোনো অভিযোগ বা পুনরায় কাজের দরকার হলে এখানে এন্ট্রি করুন। Revisit Job আলাদা তালিকায় থাকবে।</div>${user.role==='admin'?`<form id="revisitForm"><div class="field"><label>Customer Name *</label><input name="name" required></div><div class="field"><label>Phone *</label><input name="phone" required></div><div class="field"><label>Previous Job ID (optional)</label><input name="previousJobId" placeholder="e.g. SE-123456"></div><div class="field"><label>Complaint / Revisit Reason *</label><textarea name="complaint" required placeholder="Customer complaint details"></textarea></div><div class="field"><label>Service</label><select name="service"><option>AC Repair - Revisit</option><option>AC Service - Revisit</option><option>Installation - Revisit</option><option>Geyser - Revisit</option><option>Washing Machine - Revisit</option><option>Refrigerator - Revisit</option><option>Other - Revisit</option></select></div><div class="field"><label>Revisit Date</label><input type="date" name="date"></div><div class="field"><label>Time</label><input type="time" name="time"></div><div class="field wide"><label>Address</label><input name="address"></div><div class="actions"><button>＋ Add Revisit Complaint</button></div></form><hr>`:''}${revisits.length?table(revisits):'<div class="empty">এখনও কোনো Revisit Complaint নেই।</div>'}</div>`;}
+if(tab==='completed'){let done=leads.filter(x=>(x.status==='Completed'||x.status==='Cancelled')&&(user.role==='admin'||isAssignedToCurrentTechnician(x))).slice().sort((a,b)=>new Date(b.completedAt||b.cancelledAt||b.jobEndedAt||0)-new Date(a.completedAt||a.cancelledAt||a.jobEndedAt||0));out=`<div class="panel"><h3>✅ Completed Jobs / সম্পন্ন ও Cancelled কাজ</h3><div class="notice">Completed এবং Admin Cancel করা Job এখানে Status সহ থাকবে।</div>${done.length?table(done):'<div class="empty">এখনও কোনো Completed/Cancelled Job নেই।</div>'}</div>`;}
+if(tab==='new')out=`<div class="panel"><h3>${t('Create New Lead','নতুন লিড তৈরি করুন')}</h3><form id="leadForm">
+<div class="field"><label>Customer Name *</label><input name="name" required></div><div class="field"><label>Phone *</label><input name="phone" required></div><div class="field"><label>Service</label><select name="service"><option>AC Repair</option><option>AC Service</option><option>Installation</option><option>Uninstallation</option><option>Gas Charging</option><option>Geyser</option><option>Washing Machine</option><option>Refrigerator</option></select></div>
+<div class="field wide"><label>Address / Google Maps link</label><input name="address" placeholder="Customer address or Maps URL"></div><div class="field wide"><label>Problem / Notes</label><textarea name="notes"></textarea></div>
+<div class="field"><label>Priority</label><select name="priority"><option>Normal</option><option>Urgent</option></select></div><div class="field"><label>Appointment Date</label><input type="date" name="date"></div><div class="field"><label>Appointment Time</label><input type="time" name="time"></div><div class="field"><label>Technician বেছে Assign করুন (ঐচ্ছিক)</label><select name="manualTech"><option value="">Auto Assign (আগের নিয়ম)</option>${(d.techs||[]).map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join('')}</select><small>Technician বেছে দিলে Job সরাসরি তাঁর কাছে যাবে।</small></div><div class="field"><label>Accept না করলে কতক্ষণ অপেক্ষা করবে?</label><select name="responseWindow"><option value="60000">১ মিনিট (Default)</option><option value="30000">৩০ সেকেন্ড</option><option value="120000">২ মিনিট</option><option value="300000">৫ মিনিট</option></select></div><div class="actions"><button>Create Lead / Assign Job</button></div></form></div>`;
+if(tab==='technicians')out=`<div class="panel"><h3>Technician Management / User Add & Delete</h3><div class="notice">নতুন Technician User তৈরি করুন অথবা User List থেকে Delete করুন। Delete করলে Login বন্ধ হবে; পুরনো Job History থাকবে।</div><form id="techForm"><div class="field"><label>Technician Name</label><input name="name" required></div><div class="field"><label>Technician Login Email</label><input name="username" type="email" placeholder="technician@gmail.com" required><small>এই Email Firebase Authentication-এ তৈরি হবে। অন্য ফোনে একই Email ও Password দিয়ে Login করবেন।</small></div><div class="field"><label>Technician Password</label><input name="password" type="password" required minlength="6"></div><div class="field"><label>Commission %</label><input name="commission" type="number" min="0" max="100" value="20"></div><div class="actions"><button>Add Technician + Login</button></div></form><br><div class="tablewrap"><table><tr><th>Name</th><th>Assigned Jobs</th><th>Completed</th><th>Commission %</th><th>Action</th></tr>${d.techs.map(n=>{let a=leads.filter(x=>x.tech===n);let profile=Object.entries(d.technicianProfiles||{}).find(([email,p])=>normTech(p.name)===normTech(n));let account=Object.entries(getAuth().technicians||{}).find(([id,acc])=>normTech(acc.name)===normTech(n));let login=(profile&&profile[0])||(account&&account[0])||'';return `<tr><td>${esc(n)}</td><td>${a.length}</td><td>${a.filter(x=>x.status==='Completed').length}</td><td>${d.commission?.[n]??20}%</td><td><button type="button" class="secondary" onclick="deleteTechnician('${esc(login||n)}','${esc(n)}')" style="background:#fee2e2;color:#991b1b">🗑 Delete User</button></td></tr>`}).join('')}</table></div></div>`;
+if(tab==='myjobs'){let todayLocal=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10),tomorrowObj=new Date();tomorrowObj.setDate(tomorrowObj.getDate()+1);let tomorrowLocal=new Date(tomorrowObj.getTime()-tomorrowObj.getTimezoneOffset()*60000).toISOString().slice(0,10);let jobView=window.jobView||'today',otherDate=window.otherJobDate||todayLocal;let dateJobs=assigned.filter(x=>!x.isRevisit&&x.status!=='Completed'&&x.status!=='Cancelled'&&(x.assignmentStatus==='pending'||(x.date||x.created||'').slice(0,10)===(jobView==='today'?todayLocal:jobView==='tomorrow'?tomorrowLocal:otherDate)));let jobCards=dateJobs.slice().sort((a,b)=>(a.time||'').localeCompare(b.time||'')).map(x=>`<div class="jobbox"><div class="jobhead"><div><b>${esc(x.name)}</b> <span class="pill">${esc(x.status)}</span><div class="muted">${esc(x.id)} • ${esc(x.service)} • ${esc(x.date||todayLocal)} ${esc(x.time||'')}</div></div><b>₹${+x.amount||0}</b></div><div class="muted">📞 ${esc(x.phone)} &nbsp; • &nbsp; 📍 ${esc(x.address||'Address not set')}</div><div class="job-actions">${!x.jobStartedAt&&x.assignmentStatus!=='pending'&&x.assignmentStatus!=='needs_admin'?`<button class="green" onclick="startJob('${x.id}')">▶ Job Start</button>`:x.jobStartedAt?`<span class="pill">Started: ${new Date(x.jobStartedAt).toLocaleTimeString()}</span>`:''}${x.jobStartedAt&&!x.jobEndedAt?`<button class="secondary" onclick="endJob('${x.id}')">■ Job End</button>`:''}${x.jobEndedAt?`<button onclick="generateBill('${x.id}')">🧾 Generate / View Bill</button>`:''}${x.assignmentStatus==='pending'?`<button class="accept" onclick="acceptAssignedJob('${x.id}')">✓ ACCEPT</button><button class="reject" onclick="rejectAssignedJob('${x.id}')">✕ REJECT</button>`:''}</div>${window.questionJob===x.id?`<div class="jobform"><h4>Job Start Checklist / Customer Questions</h4><form id="jobQuestionForm" data-job="${x.id}"><div class="field"><label>Customer Problem / সমস্যা</label><input name="customerProblem" value="${esc(x.questionnaire?.customerProblem||'')}" required></div><div class="field"><label>AC Cooling</label><select name="cooling"><option>${esc(x.questionnaire?.cooling||'Select')}</option><option>Good</option><option>Low Cooling</option><option>No Cooling</option></select></div><div class="field"><label>Leak Check</label><select name="leak"><option>${esc(x.questionnaire?.leak||'Select')}</option><option>No Leak</option><option>Water Leak</option><option>Gas Leak</option></select></div><div class="field"><label>Work / কাজ</label><input name="work" value="${esc(x.questionnaire?.work||'')}" required></div><div class="field"><label>Parts Needed</label><input name="parts" value="${esc(x.questionnaire?.parts||'None')}"></div><div class="field wide"><label>Customer Remark / Technician Notes</label><textarea name="remark">${esc(x.questionnaire?.remark||'')}</textarea></div><div class="actions"><button class="green" type="submit">Save Questions & Start Job</button><button class="secondary" type="button" onclick="cancelJobStart()">Cancel</button></div></form></div>`:''}</div>`).join('');out=`<div class="techhero"><h2>Technician Workspace</h2><div>My Jobs • Schedule • Service & Billing</div><div style="margin-top:8px">👨‍🔧 ${esc(user.name)} &nbsp; | &nbsp; আজকের কাজ ও বিল এক জায়গায়</div></div><div class="panel"><h3>My Assigned Jobs / আমার কাজ</h3><div class="notice">Cloud Status: ${cloudReady?'Connected • Live Sync':'Not Connected — '+esc(cloudLastError||'Reconnect Cloud চাপুন')} | Login: ${esc(user.username)} | Technician: ${esc(user.name)} <button class="secondary" type="button" onclick="cloudSyncNow()">☁️ Reconnect / Refresh Jobs</button></div><div class="notice">Job Start → Checklist → Parts & Charges → Job End → Generate Invoice। সব তথ্য একই Job-এর মধ্যে থাকবে।</div>${assigned.filter(x=>x.assignmentStatus==='pending'&&x.status!=='Completed'&&x.status!=='Cancelled').map(x=>`<div class="assignment-pending"><b>🔔 NEW JOB ASSIGNED — ${esc(x.id)}</b><p><b>${esc(x.name)}</b> • ${esc(x.service)}<br>📞 ${esc(x.phone)} • 📍 ${esc(x.address||'Address not set')}<br>📅 ${esc(x.date||'Date not set')} ${esc(x.time||'')}</p><div class="ring-hint">${x.assignmentExpiresAt?`লম্বা অ্যালার্ট বাজবে। ${Math.max(0,Math.ceil((Number(x.assignmentExpiresAt)-Date.now())/1000))} সেকেন্ডের মধ্যে Accept করুন; না হলে পরবর্তী Technician-কে পাঠানো হবে।`:`এই Job আপনার নামে Pending আছে। CRM-এ Login করার পর Accept বা Reject করুন; কোনো Auto Timeout নেই।`}</div><div class="assignment-actions"><button class="accept" onclick="acceptAssignedJob('${x.id}')">✓ ACCEPT</button><button class="reject" onclick="rejectAssignedJob('${x.id}')">✕ REJECT</button></div></div>`).join('')}<div class="toolbar"><button class="${jobView==='today'?'':'secondary'}" onclick="setJobView('today')">Today Jobs</button><button class="${jobView==='tomorrow'?'':'secondary'}" onclick="setJobView('tomorrow')">Tomorrow Jobs</button><button class="${jobView==='other'?'':'secondary'}" onclick="setJobView('other')">Other Date</button><input style="max-width:190px" type="date" value="${otherDate}" onchange="setOtherJobDate(this.value)"></div><p><b>${jobView==='today'?'Today • '+todayLocal:jobView==='tomorrow'?'Tomorrow • '+tomorrowLocal:'Selected Date • '+otherDate}</b> — ${dateJobs.length} jobs</p><div class="notice">Location ও Notifications চালু করতে Chrome permission Allow করুন।</div><span id="trackState" class="pill">Automatic GPS: checking permission…</span> <span id="locMsg" class="muted"></span><div class="notice">Technician Login করার পর GPS স্বয়ংক্রিয়ভাবে চালু হবে (প্রথমবার Chrome Location Allow দিতে হবে)। CRM খোলা ও ফোনের Location ON রাখুন।</div>${jobCards||'<div class="empty">এই তারিখে কোনো কাজ নেই।</div>'}`;}
+if(tab==='tracking'){let latest={};leads.filter(x=>x.location&&x.tech).forEach(x=>{let old=latest[x.tech];if(!old||new Date(x.location.updatedAt||0)>new Date(old.location.updatedAt||0))latest[x.tech]=x});out=`<div class="panel"><h3>Live Technician Location / টেকনিশিয়ান লাইভ লোকেশন</h3><div class="notice">Technician ফোনে Login করলেই GPS auto-start হবে (প্রথমবার Chrome Location Allow লাগবে)। Live update দেখতে Firebase Cloud Sync এবং HTTPS hosting আবশ্যক। Browser বন্ধ/ফোনের background restriction হলে tracking থামতে পারে।</div><button class="secondary" onclick="render()">↻ Refresh Location</button><div class="tablewrap"><table><tr><th>Technician</th><th>Current Job</th><th>Job Status</th><th>Last GPS Update</th><th>Map</th></tr>${Object.keys(latest).length?Object.entries(latest).map(([n,x])=>`<tr><td>${esc(n)}</td><td>${esc(x.id)} — ${esc(x.name)}</td><td>${esc(x.status||'—')}</td><td>${esc(new Date(x.location.updatedAt).toLocaleString())}</td><td><a target="_blank" href="https://maps.google.com/?q=${x.location.lat},${x.location.lng}">📍 Open Map</a></td></tr>`).join(''):'<tr><td colspan="5">No GPS location received yet. Technician Start Tracking করুন।</td></tr>'}</table></div></div>`}
+if(tab==='reports'){let month=new Date().toISOString().slice(0,7),ml=leads.filter(x=>(x.date||x.created||'').startsWith(month));let income=ml.reduce((a,x)=>a+(+x.paid||0),0);out=`${metrics}<div class="panel"><h3>Monthly Income Report • ${month}</h3><div class="cards"><div class="card"><div class="muted">Jobs this month</div><div class="metric">${ml.length}</div></div><div class="card"><div class="muted">Collected</div><div class="metric">₹${income}</div></div><div class="card"><div class="muted">Technician Commission (estimated)</div><div class="metric">₹${ml.reduce((a,x)=>a+(+x.commission||0),0)}</div></div></div><button onclick="exportCSV()">Export CSV</button></div>`}
+if(tab==='cloud')out=`<div class="panel"><h3>☁️ Firebase Cloud Database / Cloud Sync</h3><div class="notice">Admin ও Technician উভয়ের Firebase Email/Password Auth; একই UID সব ডিভাইসে থাকবে। Firestore Rules-এ crmStaff approval থাকতে হবে।</div><form id="cloudForm"><div class="field"><label>API Key</label><input name="apiKey" value="${esc(cloudConfig()?.apiKey||'')}" required></div><div class="field"><label>Auth Domain</label><input name="authDomain" value="${esc(cloudConfig()?.authDomain||'')}" placeholder="your-project.firebaseapp.com"></div><div class="field"><label>Project ID</label><input name="projectId" value="${esc(cloudConfig()?.projectId||'')}" required></div><div class="field"><label>App ID</label><input name="appId" value="${esc(cloudConfig()?.appId||'')}" required></div><div class="field"><label>Storage Bucket (optional)</label><input name="storageBucket" value="${esc(cloudConfig()?.storageBucket||'')}" ></div><div class="field"><label>Messaging Sender ID (optional)</label><input name="messagingSenderId" value="${esc(cloudConfig()?.messagingSenderId||'')}"></div><div class="actions"><button>Save Config & Connect</button><button type="button" class="secondary" onclick="cloudSyncNow()">↻ Sync Now</button></div></form><p id="cloudStatus" class="notice">${cloudReady?'Connected':'Not connected — Login করার পর Cloud auto-connect হবে'}</p><p class="muted"><b>Current Firebase UID:</b> <code>${window.firebase&&firebase.apps.length&&firebase.auth().currentUser?esc(firebase.auth().currentUser.uid):'Admin Login-এর পর দেখাবে'}</code><br><b>Sign-in provider:</b> ${window.firebase&&firebase.apps.length&&firebase.auth().currentUser?(firebase.auth().currentUser.isAnonymous?'Anonymous (বন্ধ করুন)':'Email/Password'):'Not signed in'}</p><p class="muted">Firebase Console → Authentication → Sign-in method-এ Email/Password Enable করুন। Admin UID-এর crmStaff/{UID} ডকুমেন্টে role=admin, active=true থাকতে হবে। Technician-এর role=technician, active=true।</p></div>`;
+if(tab==='password')out=`<div class="panel"><h3>Password Change / পাসওয়ার্ড পরিবর্তন</h3><div class="notice">নতুন পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের দিন।</div><form id="passwordForm"><div class="field"><label>Current Password</label><input name="old" type="password" required></div><div class="field"><label>New Password</label><input name="next" type="password" minlength="6" required></div><div class="field"><label>Confirm New Password</label><input name="confirm" type="password" minlength="6" required></div><div class="actions"><button>Change Password</button></div></form></div>`;
+if(tab==='feedback')out=`<div class="panel"><h3>Customer Feedback</h3><form id="feedbackForm"><div class="field"><label>Customer</label><input name="customer" required></div><div class="field"><label>Rating</label><select name="rating"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></div><div class="field"><label>Feedback</label><input name="text" required></div><div class="actions"><button>Save Feedback</button></div></form><br>${d.feedback.map(f=>`<p>⭐ ${esc(f.rating)} — <b>${esc(f.customer)}</b>: ${esc(f.text)}</p>`).join('')||'<p class="muted">No feedback yet.</p>'}</div>`;
+$('content').innerHTML=out;
+if(tab==='ledger'&&$('ledgerSearch'))$('ledgerSearch').oninput=e=>{const q=e.target.value.toLowerCase();const rows=(user.role==='admin'?leads:leads.filter(x=>isAssignedToCurrentTechnician(x))).filter(x=>[x.id,x.name,x.phone,x.tech,x.status,x.service].some(v=>String(v||'').toLowerCase().includes(q)));$('ledgerTable').innerHTML=rows.length?table(rows):'<div class="empty">কোনো Job মেলেনি।</div>';};
+window.deleteTechnician=async(loginId,name)=>{
+ if(user?.role!=='admin'){alert('শুধু Admin User Delete করতে পারবেন।');return;}
+ if(!confirm(`এই Technician User-এর CRM Access বন্ধ করবেন?\nName: ${name}\nEmail: ${loginId}\nপুরনো Job History থাকবে।`))return;
+ const d=read(),auth=getAuth();
+ d.technicianProfiles=d.technicianProfiles||{};
+ const revokeEmail=loginId&&loginId.includes('@')?loginId.toLowerCase():Object.keys(d.technicianProfiles).find(email=>normTech(d.technicianProfiles[email]?.name)===normTech(name));
+ const revokeProfile=revokeEmail?d.technicianProfiles[revokeEmail]:null;
+ const active=d.leads.filter(x=>normTech(x.tech)===normTech(name)&&!['Completed','Cancelled'].includes(x.status));
+ if(active.length&&!confirm(active.length+'টি Active Job এই Technician-এর নামে আছে। Continue?'))return;
+ d.techs=(d.techs||[]).filter(n=>normTech(n)!==normTech(name));
+ if(d.commission)delete d.commission[name];
+ if(revokeEmail)delete d.technicianProfiles[revokeEmail];
+ else for(const [email,p] of Object.entries(d.technicianProfiles)){if(normTech(p.name)===normTech(name))delete d.technicianProfiles[email];}
+ for(const [id,a] of Object.entries(auth.technicians||{})){if(id===loginId||normTech(a.name)===normTech(name))delete auth.technicians[id];}
+ localStorage.setItem(AUTH_KEY,JSON.stringify(auth));localStorage.setItem('singharayCRM',JSON.stringify(d));
+ try{
+  if(!cloudReady||!cloudDb)await connectCloud(cloudConfig());
+  const uid=revokeProfile&&revokeProfile.uid;
+  if(uid)await cloudDb.collection('crmStaff').doc(uid).set({active:false,revokedAt:new Date().toISOString()},{merge:true});
+  await cloudPush(d);
+  alert('Technician-এর CRM Access বন্ধ করা হয়েছে। Firebase Authentication account চাইলে Console → Authentication → Users থেকে Delete করতে পারেন।');
+ }
+ catch(err){alert('Local থেকে সরানো হয়েছে, Cloud revoke হয়নি: '+(err.code||'')+' '+err.message);}
+ render();
+};
+if($('cloudForm'))$('cloudForm').onsubmit=async e=>{e.preventDefault();let f=new FormData(e.target),cfg=Object.fromEntries(f.entries());localStorage.setItem('singharayFirebaseConfig',JSON.stringify(cfg));try{await connectCloud(cfg);await cloudPull();await cloudPush(read());alert('Firebase Cloud connected & synced!');render()}catch(err){$('cloudStatus').textContent='Connect failed: '+(err.code||'')+' '+err.message;alert('Firebase connect error: '+err.message)}};
+if($('jobQuestionForm'))$('jobQuestionForm').onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),d=read(),x=d.leads.find(z=>z.id===e.target.dataset.job);if(!x)return;x.questionnaire={customerProblem:f.get('customerProblem'),cooling:f.get('cooling'),leak:f.get('leak'),work:f.get('work'),parts:f.get('parts'),remark:f.get('remark')};x.jobStartedAt=new Date().toISOString();x.status='In Progress';x.events=x.events||[];x.events.push({status:'Job Started + Checklist Saved',time:new Date().toLocaleString(),by:user.name});save(d);window.questionJob=null;alert('Checklist save হয়েছে এবং Job Start হয়েছে।');render()};
+if($('revisitForm'))$('revisitForm').onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),d=read();let previous=String(f.get('previousJobId')||'').trim();let linked=d.leads.find(z=>z.id===previous);let rec={id:'RV-'+Date.now().toString().slice(-7),name:String(f.get('name')).trim(),phone:String(f.get('phone')).trim(),service:f.get('service'),address:f.get('address'),notes:String(f.get('complaint')).trim(),complaint:String(f.get('complaint')).trim(),previousJobId:previous,isRevisit:true,tech:f.get('tech'),priority:'Urgent',date:f.get('date'),time:f.get('time'),status:f.get('tech')?'Revisit Assigned':'Revisit Pending',assignmentStatus:f.get('tech')?'pending':'needs_admin',assignmentVersion:1,assignmentAttemptedTechs:f.get('tech')?[String(f.get('tech'))]:[],assignedTechIndex:(d.techs||[]).indexOf(f.get('tech')),assignedAt:f.get('tech')?new Date().toISOString():null,responseWindowMs:60000,assignmentExpiresAt:f.get('tech')?Date.now()+60000:null,amount:0,paid:0,commission:0,created:new Date().toISOString(),events:[{status:'Revisit Complaint Registered',time:new Date().toLocaleString(),by:user.name}]};if(linked){rec.previousJobCustomer=linked.name;rec.previousJobService=linked.service;}d.leads.push(rec);save(d);alert('Revisit complaint আলাদা Revisit Jobs-এ যোগ হয়েছে। Assigned Technician-কে notification পাঠানো হবে।');render()};
+if($('leadForm'))$('leadForm').onsubmit=async e=>{
+ e.preventDefault();
+ let f=new FormData(e.target);
+ if(!cloudReady||!cloudDb){alert('Firebase Cloud সংযুক্ত নেই। আগে Cloud Status Connected করুন।');return;}
+ let win=+(f.get('responseWindow')||60000);
+ const jobBase={id:'SE-'+Date.now().toString().slice(-6),name:String(f.get('name')||'').trim(),phone:String(f.get('phone')||'').trim(),service:f.get('service'),address:f.get('address'),notes:f.get('notes'),priority:f.get('priority'),date:f.get('date'),time:f.get('time'),assignmentStatus:'pending',assignmentVersion:1,responseWindowMs:win,amount:0,paid:0,commission:0,created:new Date().toISOString()};
+ try{
+  const ref=cloudDb.collection('singharayCRM').doc('main');
+  let assignedName='',wasOnline=false;
+  await cloudDb.runTransaction(async tx=>{
+   const snap=await tx.get(ref);
+   const data=snap.exists?snap.data():{};
+   data.leads=Array.isArray(data.leads)?data.leads:[];
+   data.techs=Array.isArray(data.techs)?data.techs:['Technician 1'];
+   if(data.leads.some(x=>String(x.id)===String(jobBase.id)))throw new Error('এই Lead ID আগে থেকেই আছে।');
+   const manualTech=String(f.get('manualTech')||'').trim();
+   const onlineTech=manualTech?manualTech:pickRoundRobin(data);
+   const tech=manualTech||onlineTech||pickAnyTechnician(data);
+   if(manualTech&&!(data.techs||[]).includes(manualTech))throw new Error('নির্বাচিত Technician তালিকায় নেই।');
+   if(!tech)throw new Error('কোনো Technician যোগ করা নেই। আগে Admin Panel থেকে Technician Add করুন।');
+   wasOnline=manualTech?!!(data.presence&&data.presence[manualTech]&&data.presence[manualTech].online):!!onlineTech;
+   assignedName=tech;
+   const job={...jobBase,tech,techUsername:technicianUsernameForName(tech,data),assignedTechIndex:data.techs.indexOf(tech),assignmentAttemptedTechs:[tech],assignedAt:new Date().toISOString(),assignmentExpiresAt:wasOnline?Date.now()+win:null,onlineAtAssignment:wasOnline,status:manualTech?'Assigned':'Assigned',events:[{status:manualTech?'Manually assigned by Admin to '+tech:(wasOnline?'Automatically assigned to Online Technician '+tech:'Assigned to '+tech+' while Offline — will appear when Technician logs in'),time:new Date().toLocaleString(),by:'CRM Assignment'}]};
+   data.leads.push(job);
+   tx.set(ref,{...data,cloudUpdatedAt:new Date().toISOString()});
+  });
+  await cloudPull();
+  alert('Lead তৈরি হয়েছে। '+assignedName+'-এর কাছে '+(wasOnline?'Job Assign হয়েছে এবং Notification যাবে।':'Assign করা হয়েছে; Technician Login করলে Job দেখবে।'));
+  tab='leads';render();
+ }catch(err){alert('Lead তৈরি করা যায়নি: '+(err.message||err));}
+};
+if($('techForm'))$('techForm').onsubmit=async e=>{
+ e.preventDefault();
+ if(user?.role!=='admin'){alert('শুধু Admin Technician Add করতে পারবেন।');return;}
+ let f=new FormData(e.target),d=read(),n=String(f.get('name')).trim(),email=String(f.get('username')).trim().toLowerCase(),pw=String(f.get('password'));
+ if(!n||!email.includes('@')||pw.length<6){alert('Technician Name, সঠিক Email এবং কমপক্ষে ৬ অক্ষরের Password দিন।');return;}
+ try{
+  if(!cloudReady||!cloudDb)await connectCloud(cloudConfig());
+  const secondary=firebase.apps.find(a=>a.name==='techCreator')||firebase.initializeApp(cloudConfig(),'techCreator');
+  const secondaryAuth=secondary.auth();let credential;
+  try{credential=await secondaryAuth.createUserWithEmailAndPassword(email,pw);}
+  catch(authErr){
+   if(authErr.code!=='auth/email-already-in-use')throw authErr;
+   credential=await secondaryAuth.signInWithEmailAndPassword(email,pw);
+  }
+  const techUid=credential.user.uid;
+  await secondaryAuth.signOut();
+  const priorStaff=await cloudDb.collection('crmStaff').doc(techUid).get();
+  if(priorStaff.exists&&priorStaff.data()?.role==='admin')throw new Error('এই Emailটি Admin Account হিসেবে ব্যবহৃত হচ্ছে। Technician হিসেবে ব্যবহার করবেন না।');
+  await cloudDb.collection('crmStaff').doc(techUid).set({uid:techUid,role:'technician',active:true,name:n,username:email,email,commission:+f.get('commission'),createdAt:new Date().toISOString()},{merge:true});
+  if(!d.techs.includes(n))d.techs.push(n);
+  d.commission=d.commission||{};d.commission[n]=+f.get('commission');
+  d.technicianProfiles=d.technicianProfiles||{};
+  d.technicianProfiles[email]={name:n,username:email,email,uid:techUid,commission:d.commission[n],authProvider:'password',createdAt:new Date().toISOString()};
+  const localAuth=getAuth();localAuth.technicians[email]={username:email,email,name:n};localStorage.setItem(AUTH_KEY,JSON.stringify(localAuth));
+  localStorage.setItem('singharayCRM',JSON.stringify(d));
+  await cloudPush(d);
+  alert(`Technician Firebase Account তৈরি ও Cloud-এ অনুমোদিত হয়েছে।
+Login Email: ${email}
+এখন অন্য ফোন/Chrome Profile থেকে এই Email ও Password দিয়ে Login করুন।`);
+  e.target.reset();render();
+ }catch(err){console.error('Technician account creation failed',err);alert(`Technician Add করা যায়নি: ${(err.code||'')} ${err.message}
+আগে Firebase Authentication → Email/Password Enable আছে কি না পরীক্ষা করুন।`);}
+};
+if($('passwordForm'))$('passwordForm').onsubmit=async e=>{
+ e.preventDefault();let f=new FormData(e.target),old=String(f.get('old')),next=String(f.get('next')),confirm=String(f.get('confirm'));
+ if(next.length<6){alert('New Password কমপক্ষে ৬ অক্ষরের হতে হবে।');return;}
+ if(next!==confirm){alert('New Password ও Confirm Password মিলছে না।');return;}
+ try{
+  if(user?.role==='tech'){
+   const fa=firebase.auth(),current=fa.currentUser;
+   if(!current||!user.email)throw new Error('Technician Firebase Session পাওয়া যায়নি। আবার Login করুন।');
+   const credential=firebase.auth.EmailAuthProvider.credential(user.email,old);
+   await current.reauthenticateWithCredential(credential);
+   await current.updatePassword(next);
+   alert('Firebase Technician Password সফলভাবে পরিবর্তন হয়েছে। পরেরবার সব ডিভাইসে নতুন Password ব্যবহার করুন।');
+  }else{
+   let auth=getAuth(),account=auth.admin;if(!account||account.password!==old){alert('বর্তমান Admin Password ভুল।');return;}account.password=next;localStorage.setItem(AUTH_KEY,JSON.stringify(auth));alert('Admin Password এই Browser Profile-এ পরিবর্তন হয়েছে।');
+  }
+  e.target.reset();
+ }catch(err){alert('Password পরিবর্তন করা যায়নি: '+(err.code||'')+' '+err.message);}
+};
+if($('feedbackForm'))$('feedbackForm').onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),d=read();d.feedback.push({customer:f.get('customer'),rating:f.get('rating'),text:f.get('text')});save(d);render()};
+}
+window.setJobView=v=>{window.jobView=v;render()};window.setOtherJobDate=v=>{window.otherJobDate=v;window.jobView='other';render()};
+window.startJob=id=>{let d=read(),x=d.leads.find(z=>z.id===id);if(!x)return;let items=[],again=true;while(again){let name=prompt('Job Start • Part Name (ফাঁকা = শেষ)','');if(name===null)return;if(!name.trim())break;let qty=prompt('Quantity',1);if(qty===null)return;let rate=prompt('Unit Price ₹',0);if(rate===null)return;items.push({name:name.trim(),qty:Math.max(1,+qty||1),rate:Math.max(0,+rate||0)});again=confirm('আরও Part Add করবেন?')}let service=prompt('Service Charge ₹',x.serviceCharge||0);if(service===null)return;let extra=prompt('Extra Charge ₹',x.extraCharge||0);if(extra===null)return;let discount=prompt('Discount ₹',x.discount||0);if(discount===null)return;let paid=prompt('Customer Advance / Paid ₹',x.paid||0);if(paid===null)return;x.partsItems=items;x.partsCharge=items.reduce((a,i)=>a+i.qty*i.rate,0);x.serviceCharge=+service||0;x.extraCharge=+extra||0;x.discount=+discount||0;x.amount=Math.max(0,x.partsCharge+x.serviceCharge+x.extraCharge-x.discount);x.paid=+paid||0;x.due=Math.max(0,x.amount-x.paid);save(d);window.questionJob=id;render()};window.cancelJobStart=()=>{window.questionJob=null;render()};
+window.markRevisit=id=>{let d=read(),x=d.leads.find(z=>z.id===id);if(!x)return;let reason=prompt('Revisit complaint / কারণ লিখুন:',x.complaint||x.notes||'');if(reason===null)return;x.isRevisit=true;x.complaint=reason;x.status=x.tech?'Revisit Assigned':'Revisit Pending';x.events=x.events||[];x.events.push({status:'Marked as Revisit Job',time:new Date().toLocaleString(),by:user.name});save(d);tab='revisit';render()};
+window.endJob=id=>{let d=read(),x=d.leads.find(z=>z.id===id);if(!x||!x.jobStartedAt)return alert('আগে Job Start করুন।');if(x.jobEndedAt)return alert('Job ইতিমধ্যে End হয়েছে।');x.jobEndedAt=new Date().toISOString();x.status='Completed';x.events=x.events||[];x.events.push({status:'Job Ended (No Cost Entry)',time:new Date().toLocaleString(),by:user.name});save(d);alert('Job End হয়েছে। Cost/Billing Entry করা হয়নি—Start Job-এ দেওয়া Billing আগের মতোই সেভ আছে।');render()};
+window.cloudSyncNow=async()=>{try{if(!cloudReady)await connectCloud(cloudConfig());await cloudPull();if(user&&user.role==='tech')startPresenceHeartbeat();await cloudPush(read());cloudLastError='';const st=$('cloudStatus');if(st)st.textContent='☁️ Cloud Sync সফল • Live listener চালু';render();alert('Cloud Sync সফল হয়েছে। Technician Online Presence চালু হয়েছে।')}catch(e){cloudLastError=(e.code?e.code+' — ':'')+e.message;const st=$('cloudStatus');if(st)st.textContent='Cloud Sync Error: '+cloudLastError;render();alert('Cloud Sync error: '+cloudLastError)}};
+
+window.generateBill=id=>{let d=read(),x=d.leads.find(z=>z.id===id);if(!x)return;let billNo=x.billNo||('BILL-'+String(x.id).replace(/[^a-z0-9]/gi,'').slice(-8));x.billNo=billNo;x.billGenerated=true;x.due=Math.max(0,(+x.amount||0)-(+x.paid||0));save(d);let html=`<!doctype html><html><head><meta charset="utf-8"><title>${billNo}</title><style>body{font:16px Arial;padding:30px;color:#17233b}h1{color:#10233f}table{width:100%;border-collapse:collapse;margin:20px 0}td,th{padding:10px;border:1px solid #ddd;text-align:left}.total{font-size:20px;font-weight:bold}.btn{padding:10px 18px;background:#1769e0;color:white;border:0;border-radius:6px}</style><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"><\/script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"><\/script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"><\/script>
+</head><body><h1>SINGHARAY ENTERPRISE</h1><p>AC Service & Repair • Kolkata</p><hr><h2>Service Bill / Invoice</h2><p><b>Bill No:</b> ${billNo} &nbsp; <b>Date:</b> ${new Date().toLocaleDateString()}</p><p><b>Customer:</b> ${x.name}<br><b>Phone:</b> ${x.phone}<br><b>Address:</b> ${x.address||''}<br><b>Technician:</b> ${x.tech||''}</p><table><tr><th>Description</th><th>Amount (₹)</th></tr><tr><td>Service Charge</td><td>${+x.serviceCharge||0}</td></tr><tr><td>Parts Charge<br>${(x.partsItems||[]).map(i=>esc(i.name)+' × '+i.qty+' @ ₹'+i.rate).join('<br>')}</td><td>${+x.partsCharge||0}</td></tr><tr><td>Additional Charge</td><td>${+x.extraCharge||0}</td></tr><tr><td>Discount</td><td>-${+x.discount||0}</td></tr></table><p class="total">Total: ₹${+x.amount||0}</p><p>Paid: ₹${+x.paid||0} &nbsp; | &nbsp; Due: ₹${+x.due||0}</p><p>Job Start: ${x.jobStartedAt?new Date(x.jobStartedAt).toLocaleString():'—'}<br>Job End: ${x.jobEndedAt?new Date(x.jobEndedAt).toLocaleString():'—'}</p><h3>Customer Questions / Work Notes</h3><p>${Object.entries(x.questionnaire||{}).map(([k,v])=>k+': '+v).join('<br>')||'—'}</p><button class="btn" onclick="window.print()">Print / Save PDF</button></body></html>`;let w=window.open('','_blank');if(w){w.document.write(html);w.document.close()}else alert('Popup Blocked. Browser popup allow করুন।');render()};
+window.adminCancelJob=async id=>{if(!user||user.role!=='admin')return alert('শুধু Admin Job Cancel করতে পারবেন।');let reason=prompt('Cancel Reason / কারণ লিখুন:', 'Customer Cancel');if(reason===null)return;reason=reason.trim();if(!reason) return alert('Cancel Reason লিখুন।');if(!confirm('এই Job Cancel করবেন? Technician-এর Dashboard থেকে Job সরিয়ে যাবে।'))return;try{await updateJobTransaction(id,(x)=>{if(x.status==='Completed')throw new Error('Completed Job Cancel করা যাবে না।');x.status='Cancelled';x.cancelledAt=new Date().toISOString();x.cancelReason=reason;x.assignmentStatus='cancelled';x.events=x.events||[];x.events.push({status:'Cancelled by Admin',reason,time:new Date().toLocaleString(),by:user.name});});alert('Job Cancel হয়েছে। Completed Jobs-এ Cancelled Status সহ থাকবে।');}catch(e){alert('Cancel Failed: '+e.message)}};
+window.editLead=id=>{let d=read(),x=d.leads.find(l=>l.id===id);if(!x)return;let allowed=['New','Assigned','Accepted','On The Way','Arrived','In Progress','On Hold','Revisit Pending','Revisit Assigned','Completed','Cancelled'];let status=prompt('Choose status: '+allowed.join(' / '),x.status);if(status===null)return;if(!allowed.includes(status)){alert('Invalid status');return}x.status=status;x.events=x.events||[];x.events.push({status,time:new Date().toLocaleString(),by:user.name});if(['On The Way','Arrived','In Progress'].includes(status))getLocationForLead(x);if(status==='Completed')x.completedAt=new Date().toISOString();if(user.role==='admin'){let amount=prompt('Total Service Amount / Bill (₹)',x.amount||0);if(amount!==null)x.amount=+amount||0;let paid=prompt('Total Payment Collected (₹)',x.paid||0);if(paid!==null)x.paid=+paid||0;let commission=prompt('Technician Commission Payable (₹)',x.commission||0);if(commission!==null)x.commission=+commission||0}save(d);render()};
+window.enableNotify=async()=>{if(!('Notification'in window)){alert('Browser notification unsupported');return}let p=await Notification.requestPermission();if(p==='granted'){new Notification('Singharay CRM',{body:'Technician notifications enabled'});alert('Notifications enabled. Keep CRM open for alerts.')}else alert('Notification permission not granted')};
+let gpsWatchId=null,gpsPulse=null;
+function saveTechnicianGPS(pos){let d=read(),mine=d.leads.filter(x=>isAssignedToCurrentTechnician(x)&&x.status!=='Completed'&&x.status!=='Cancelled');if(!mine.length){return}let stamp=new Date().toISOString();mine.forEach(x=>{x.location={lat:pos.coords.latitude,lng:pos.coords.longitude,accuracy:pos.coords.accuracy,updatedAt:stamp,mapsUrl:'https://maps.google.com/?q='+pos.coords.latitude+','+pos.coords.longitude,tracking:true};x.events=x.events||[];x.events.push({status:'Live GPS updated',time:new Date().toLocaleString(),by:user.name})});save(d);if(tab==='myjobs')render();}
+window.autoStartTechnicianGPS=()=>{if(!user||user.role!=='tech')return;if(!navigator.geolocation){setTrackStatus('GPS unsupported');return}if(!window.isSecureContext){setTrackStatus('GPS needs HTTPS hosting (not file://)');return}let d=read(),mine=d.leads.filter(x=>isAssignedToCurrentTechnician(x)&&x.status!=='Completed'&&x.status!=='Cancelled');if(!mine.length){setTrackStatus('No active assigned job');return}if(gpsWatchId!==null){setTrackStatus('GPS tracking active');return}setTrackStatus('Requesting location permission…');navigator.geolocation.getCurrentPosition(pos=>{saveTechnicianGPS(pos);gpsWatchId=navigator.geolocation.watchPosition(saveTechnicianGPS,err=>setTrackStatus('GPS error: '+err.message+'; allow Location in Chrome'),{enableHighAccuracy:true,maximumAge:5000,timeout:20000});if(gpsPulse)clearInterval(gpsPulse);gpsPulse=setInterval(()=>navigator.geolocation.getCurrentPosition(saveTechnicianGPS,()=>{}, {enableHighAccuracy:true,maximumAge:0,timeout:15000}),30000);setTrackStatus('🟢 Automatic GPS tracking active');},err=>setTrackStatus('Location permission needed: Chrome → Site settings → Location → Allow ('+err.message+')'),{enableHighAccuracy:true,timeout:20000});};
+function setTrackStatus(msg){let el=$('trackState');if(el)el.textContent=msg;let lm=$('locMsg');if(lm)lm.textContent=new Date().toLocaleTimeString();}
+window.startLocationTracking=()=>window.autoStartTechnicianGPS();
+window.stopLocationTracking=()=>{if(gpsWatchId!==null)navigator.geolocation.clearWatch(gpsWatchId);gpsWatchId=null;if(gpsPulse)clearInterval(gpsPulse);gpsPulse=null;let d=read();d.leads.filter(x=>isAssignedToCurrentTechnician(x)&&x.location).forEach(x=>x.location.tracking=false);save(d);alert('Location Tracking বন্ধ হয়েছে।');render()};
+window.getLocationForLead=(lead)=>{if(!navigator.geolocation){alert('GPS support নেই');return}navigator.geolocation.getCurrentPosition(pos=>{let d=read(),target=d.leads.find(l=>l.id===lead.id);if(!target)return;target.location={lat:pos.coords.latitude,lng:pos.coords.longitude,accuracy:pos.coords.accuracy,updatedAt:new Date().toISOString(),mapsUrl:'https://maps.google.com/?q='+pos.coords.latitude+','+pos.coords.longitude};target.events=target.events||[];target.events.push({status:'GPS Location updated',time:new Date().toLocaleString(),by:user.name});save(d);render();alert('GPS Location ও Google Maps link save হয়েছে।')},err=>alert('GPS permission/location error: '+err.message+' — Browser location permission Allow করুন।'),{enableHighAccuracy:true,timeout:15000})};
+window.shareMyLocation=()=>{let d=read(),my=d.leads.filter(x=>isAssignedToCurrentTechnician(x)&&x.status!=='Completed'&&x.status!=='Cancelled');if(!my.length){alert('No active assigned job');return}getLocationForLead(my[0]);};
+window.exportCSV=()=>{let rows=read().leads;let csv=['ID,Customer,Phone,Service,Technician,Status,Payment,Commission',...rows.map(x=>[x.id,x.name,x.phone,x.service,x.tech,x.status,x.paid,x.commission].map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(','))].join('\\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='singharay-monthly-report.csv';a.click()};
+</script>
+</body></html>
