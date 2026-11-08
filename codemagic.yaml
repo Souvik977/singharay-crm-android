@@ -9,7 +9,6 @@ workflows:
       - name: Build APK
         script: |
           cd Singharay_CRM_Android_WebView_Project
-          chmod +x gradlew
-          ./gradlew assembleDebug
+          gradle assembleDebug
     artifacts:
       - Singharay_CRM_Android_WebView_Project/app/build/outputs/apk/debug/*.apk
